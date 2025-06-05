@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌈 Beautiful Task Manager</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right top, #a18cd1, #fbc2eb);
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    input[type="text"] {
+      width: 65%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-right: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 16px;
+      background-color: #4facfe;
+      background-image: linear-gradient(to right, #00f2fe, #4facfe);
+      border: none;
+      color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-image: linear-gradient(to right, #4facfe, #00f2fe);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: background 0.3s ease;
+    }
+
+    li:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+      font-style: italic;
+    }
+
+    .delete-btn {
+      background-color: #ff4b5c;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #d43f4a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🌈 Beautiful Task Manager</h2>
+    <input type="text" id="taskInput" placeholder="📝 Add a task...">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const tasks = [
+      { id: 1, title: '🛒 Buy groceries', completed: false },
+      { id: 2, title: '📚 Read a book', completed: true }
+    ];
+
+    const taskList = document.getElementById('taskList');
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      tasks.forEach(task => {
+        const li = document.createElement('li');
+
+        const span = document.createElement('span');
+        span.textContent = task.title;
+        span.className = task.completed ? 'completed' : '';
+        span.onclick = () => toggleCompleted(task.id);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '❌';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.onclick = () => deleteTask(task.id);
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const title = input.value.trim();
+      if (title === '') return;
+      const newId = tasks.length ? tasks[tasks.length - 1].id + 1 : 1;
+      tasks.push({ id: newId, title: '🆕 ' + title, completed: false });
+      input.value = '';
+      renderTasks();
+    }
+
+    function toggleCompleted(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        renderTasks();
+      }
+    }
+
+    function deleteTask(id) {
+      const index = tasks.findIndex(t => t.id === id);
+      if (index > -1) {
+        tasks.splice(index, 1);
+        renderTasks();
+      }
+    }
+
+    renderTasks();
+  </script>
+</body>
+</html>
